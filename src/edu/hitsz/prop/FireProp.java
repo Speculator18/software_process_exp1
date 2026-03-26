@@ -10,6 +10,6 @@ public class FireProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        System.out.println("FireSupply active!");
     }
 }
-

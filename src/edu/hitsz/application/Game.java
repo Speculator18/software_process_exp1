@@ -219,8 +219,15 @@ public class Game extends JPanel {
             }
         }
 
-        // Todo: 我方获得道具，道具生效
-
+        for (AbstractProp prop : props) {
+            if (prop.notValid()) {
+                continue;
+            }
+            if (heroAircraft.crash(prop) || prop.crash(heroAircraft)) {
+                prop.activate(heroAircraft);
+                prop.vanish();
+            }
+        }
     }
 
     /**
