@@ -89,6 +89,21 @@ AbstractEnemy <|-- ElitePlusEnemy
 AbstractEnemy <|-- EliteProEnemy
 AbstractEnemy <|-- BossEnemy
 
+note bottom of AbstractEnemy
+  Game 中按 enemySpawnCycle 周期生成敌机，
+  在 MobEnemy 与 EliteEnemy 之间随机选择类型
+end note
+
+note right of MobEnemy
+  普通敌机：
+  不发射子弹
+end note
+
+note right of EliteEnemy
+  精英敌机：
+  按设定周期向下直射单排子弹
+end note
+
 abstract class BaseBullet
 {
     - power:int
