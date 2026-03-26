@@ -27,13 +27,15 @@ abstract class AbstractFlyingObject
 }
 abstract class AbstractAircraft
 {
-	# maxHp:int
+    # maxHp:int
     # hp:int
     + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + decreaseHp(int decrease):void
     + getHp():int
+    + getMaxHp():int
+    + increaseHp(int increase):void
     + {abstract} shoot():List<BaseBullet>
- }
+}
 
 
 class HeroAircraft <<Singleton>> {
@@ -164,5 +166,29 @@ AbstractProp <|-- FireProp
 AbstractProp <|-- FirePlusProp
 AbstractProp <|-- BombProp
 AbstractProp <|-- FreezeProp
+
+note bottom of AbstractProp
+  精英敌机 EliteEnemy 坠毁时，
+  Game 以一定概率在其位置生成
+  BloodProp / FireProp / FirePlusProp
+end note
+
+note right of BloodProp
+  加血道具：
+  调用 HeroAircraft.increaseHp(...)
+  恢复一定血量但不超过 maxHp
+end note
+
+note right of FireProp
+  火力道具：
+  激活时在控制台打印
+  "FireSupply active!"
+end note
+
+note right of FirePlusProp
+  超级火力道具：
+  激活时在控制台打印
+  "FirePlusSupply active!"
+end note
 
 @enduml
