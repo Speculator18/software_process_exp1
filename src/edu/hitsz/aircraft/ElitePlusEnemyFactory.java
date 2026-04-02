@@ -3,6 +3,10 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 
+/**
+ * 精锐敌机工厂：负责创建 ElitePlusEnemy，
+ * 后续可根据难度调整其速度和血量。
+ */
 public class ElitePlusEnemyFactory implements EnemyFactory {
 
     @Override
@@ -15,4 +19,3 @@ public class ElitePlusEnemyFactory implements EnemyFactory {
         return new ElitePlusEnemy(x, y, speedX, speedY, hp);
     }
 }
-

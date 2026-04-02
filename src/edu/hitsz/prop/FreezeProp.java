@@ -10,6 +10,7 @@ public class FreezeProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        // 冰冻道具：当前实验同样只需输出提示信息
         System.out.println("FreezeSupply active!");
     }
 }

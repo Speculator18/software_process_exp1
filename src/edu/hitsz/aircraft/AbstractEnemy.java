@@ -11,6 +11,7 @@ public abstract class AbstractEnemy extends AbstractAircraft {
     @Override
     public void forward() {
         super.forward();
+        // 敌机飞出屏幕下边界后标记为无效，释放名额以生成新的敌机
         if (locationY >= Main.WINDOW_HEIGHT) {
             vanish();
         }

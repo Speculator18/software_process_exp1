@@ -3,6 +3,10 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 
+/**
+ * 普通敌机工厂：负责创建 MobEnemy，
+ * 封装其初始坐标、速度和血量等参数。
+ */
 public class MobEnemyFactory implements EnemyFactory {
 
     @Override
@@ -15,4 +19,3 @@ public class MobEnemyFactory implements EnemyFactory {
         return new MobEnemy(x, y, speedX, speedY, hp);
     }
 }
-

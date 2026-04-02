@@ -34,6 +34,7 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
 
+    // 四种敌机工厂：通过工厂方法模式创建不同类型敌机
     private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyFactory eliteEnemyFactory = new EliteEnemyFactory();
     private final EnemyFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
@@ -86,6 +87,7 @@ public class Game extends JPanel {
                     enemySpawnCounter = 0;
                     if (enemyAircrafts.size() < enemyMaxNumber) {
                         double random = Math.random();
+                        // 按概率在四种敌机工厂中选择一种，保证四种敌机按周期随机出现
                         EnemyFactory enemyFactory;
                         if (random < 0.4) {
                             enemyFactory = mobEnemyFactory;
@@ -188,11 +190,14 @@ public class Game extends JPanel {
                     if (enemyAircraft.notValid()) {
                         score += 10;
                         double random = Math.random();
+                        // 高级敌机（精英 / 精锐 / 王牌）按一定概率掉落道具
                         if (random < 0.5) {
                             int x = enemyAircraft.getLocationX();
                             int y = enemyAircraft.getLocationY();
                             int speedX = 0;
                             int speedY = 3;
+                            // 根据敌机类型决定可掉落道具种类数：
+                            // Elite 敌机掉落 3 种，ElitePlus 掉落 4 种，ElitePro 掉落 5 种
                             int typeCount;
                             if (enemyAircraft instanceof EliteEnemy) {
                                 typeCount = 3;

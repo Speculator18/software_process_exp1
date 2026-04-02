@@ -3,6 +3,10 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 
+/**
+ * 王牌敌机工厂：负责创建 EliteProEnemy，
+ * 提供高速度、高血量的高难度敌机。
+ */
 public class EliteProEnemyFactory implements EnemyFactory {
 
     @Override
@@ -15,4 +19,3 @@ public class EliteProEnemyFactory implements EnemyFactory {
         return new EliteProEnemy(x, y, speedX, speedY, hp);
     }
 }
-

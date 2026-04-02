@@ -16,6 +16,7 @@ public class EliteProEnemy extends AbstractEnemy {
     @Override
     public void forward() {
         super.forward();
+        // 到达左右边界后反向，保证王牌敌机在屏幕内左右来回移动
         if (locationX <= getWidth() / 2 || locationX >= Main.WINDOW_WIDTH - getWidth() / 2) {
             speedX = -speedX;
         }
@@ -24,6 +25,7 @@ public class EliteProEnemy extends AbstractEnemy {
     @Override
     public List<BaseBullet> shoot() {
         List<BaseBullet> res = new LinkedList<>();
+        // 扇形散射：左、中、右三颗子弹，speedX 分别为 -2 / 0 / 2
         int x = getLocationX();
         int y = getLocationY() + getHeight() / 2;
         int speedY = getSpeedY() + 5;

@@ -13,6 +13,7 @@ public class BloodProp extends AbstractProp {
         if (heroAircraft == null) {
             return;
         }
+        // 加血道具：为英雄机恢复一定生命值（不超过最大值）
         heroAircraft.increaseHp(30);
     }
 }

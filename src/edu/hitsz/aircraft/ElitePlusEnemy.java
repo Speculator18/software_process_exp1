@@ -16,6 +16,7 @@ public class ElitePlusEnemy extends AbstractEnemy {
     @Override
     public void forward() {
         super.forward();
+        // 到达左右边界后反向，形成左右摆动的移动轨迹
         if (locationX <= getWidth() / 2 || locationX >= Main.WINDOW_WIDTH - getWidth() / 2) {
             speedX = -speedX;
         }
@@ -24,6 +25,7 @@ public class ElitePlusEnemy extends AbstractEnemy {
     @Override
     public List<BaseBullet> shoot() {
         List<BaseBullet> res = new LinkedList<>();
+        // 双排直射子弹：在机体左右两侧各发射一颗子弹
         int baseX = getLocationX();
         int y = getLocationY() + getHeight() / 2;
         int offsetX = 15;
