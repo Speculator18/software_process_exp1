@@ -4,9 +4,7 @@ import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.prop.AbstractProp;
-import edu.hitsz.prop.BloodProp;
-import edu.hitsz.prop.FirePlusProp;
-import edu.hitsz.prop.FireProp;
+import edu.hitsz.prop.PropFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,6 +33,9 @@ public class Game extends JPanel {
     private final List<BaseBullet> heroBullets;
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
+
+    private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
+    private final EnemyFactory eliteEnemyFactory = new EliteEnemyFactory();
 
     // 屏幕中出现的敌机最大数量
     private final int enemyMaxNumber = 5;
@@ -83,23 +84,13 @@ public class Game extends JPanel {
                     enemySpawnCounter = 0;
                     if (enemyAircrafts.size() < enemyMaxNumber) {
                         double random = Math.random();
+                        EnemyFactory enemyFactory;
                         if (random < 0.6) {
-                            enemyAircrafts.add(new MobEnemy(
-                                    (int) (Math.random()
-                                            * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth())),
-                                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
-                                    0,
-                                    10,
-                                    30));
+                            enemyFactory = mobEnemyFactory;
                         } else {
-                            enemyAircrafts.add(new EliteEnemy(
-                                    (int) (Math.random()
-                                            * (Main.WINDOW_WIDTH - ImageManager.ELITE_ENEMY_IMAGE.getWidth())),
-                                    (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
-                                    0,
-                                    8,
-                                    60));
+                            enemyFactory = eliteEnemyFactory;
                         }
+                        enemyAircrafts.add(enemyFactory.createEnemy());
                     }
                 }
 
@@ -198,14 +189,7 @@ public class Game extends JPanel {
                                 int speedX = 0;
                                 int speedY = 3;
                                 int type = (int) (Math.random() * 3);
-                                AbstractProp prop;
-                                if (type == 0) {
-                                    prop = new BloodProp(x, y, speedX, speedY);
-                                } else if (type == 1) {
-                                    prop = new FireProp(x, y, speedX, speedY);
-                                } else {
-                                    prop = new FirePlusProp(x, y, speedX, speedY);
-                                }
+                                AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
                                 props.add(prop);
                             }
                         }
