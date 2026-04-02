@@ -10,6 +10,6 @@ public class BombProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        System.out.println("BombSupply active!");
     }
 }
-

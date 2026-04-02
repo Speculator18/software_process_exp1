@@ -10,6 +10,6 @@ public class FreezeProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        System.out.println("FreezeSupply active!");
     }
 }
-

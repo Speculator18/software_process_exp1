@@ -187,14 +187,24 @@ public class Game extends JPanel {
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
                         score += 10;
-                        if (enemyAircraft instanceof EliteEnemy) {
-                            double random = Math.random();
-                            if (random < 0.5) {
-                                int x = enemyAircraft.getLocationX();
-                                int y = enemyAircraft.getLocationY();
-                                int speedX = 0;
-                                int speedY = 3;
-                                int type = (int) (Math.random() * 3);
+                        double random = Math.random();
+                        if (random < 0.5) {
+                            int x = enemyAircraft.getLocationX();
+                            int y = enemyAircraft.getLocationY();
+                            int speedX = 0;
+                            int speedY = 3;
+                            int typeCount;
+                            if (enemyAircraft instanceof EliteEnemy) {
+                                typeCount = 3;
+                            } else if (enemyAircraft instanceof ElitePlusEnemy) {
+                                typeCount = 4;
+                            } else if (enemyAircraft instanceof EliteProEnemy) {
+                                typeCount = 5;
+                            } else {
+                                typeCount = 0;
+                            }
+                            if (typeCount > 0) {
+                                int type = (int) (Math.random() * typeCount);
                                 AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
                                 props.add(prop);
                             }
