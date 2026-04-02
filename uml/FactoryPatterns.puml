@@ -1,0 +1,141 @@
+@startuml
+' https://plantuml.com/class-diagram
+
+' ===========================
+' 简单工厂模式（道具创建场景）
+' ===========================
+title 简单工厂模式（道具创建场景）
+
+package "Prop Simple Factory" {
+
+    abstract class AbstractProp {
+        + AbstractProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class BloodProp {
+        + BloodProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class FireProp {
+        + FireProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class FirePlusProp {
+        + FirePlusProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class BombProp {
+        + BombProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class FreezeProp {
+        + FreezeProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(HeroAircraft heroAircraft):void
+    }
+
+    class PropFactory <<SimpleFactory>> {
+        + {static} createProp(int type, int x, int y, int speedX, int speedY): AbstractProp
+    }
+}
+
+AbstractProp <|-- BloodProp
+AbstractProp <|-- FireProp
+AbstractProp <|-- FirePlusProp
+AbstractProp <|-- BombProp
+AbstractProp <|-- FreezeProp
+
+class Game
+Game ..> PropFactory : 使用\ncreateProp(...)
+PropFactory ..> AbstractProp : 创建\n道具对象
+
+note top of PropFactory
+  简单工厂（Simple Factory）：
+  由一个工厂类根据传入参数
+  统一创建并返回不同的道具对象。
+  客户端（Game）只依赖抽象产品 AbstractProp，
+  不直接依赖具体道具类。
+end note
+
+' == 分隔线 ==
+
+' ===========================
+' 工厂方法模式（敌机创建场景）
+' ===========================
+title 工厂方法模式（敌机创建场景）
+
+package "Enemy Factory Method" {
+
+    abstract class AbstractEnemy {
+        + AbstractEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    }
+
+    class MobEnemy {
+        + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    }
+
+    class EliteEnemy {
+        + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    }
+
+    class ElitePlusEnemy {
+        + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    }
+
+    class EliteProEnemy {
+        + EliteProEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    }
+
+    interface EnemyFactory {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class MobEnemyFactory <<FactoryMethod>> {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class EliteEnemyFactory <<FactoryMethod>> {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class ElitePlusEnemyFactory <<FactoryMethod>> {
+        + createEnemy(): AbstractEnemy
+    }
+
+    class EliteProEnemyFactory <<FactoryMethod>> {
+        + createEnemy(): AbstractEnemy
+    }
+}
+
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+
+EnemyFactory <|.. MobEnemyFactory
+EnemyFactory <|.. EliteEnemyFactory
+EnemyFactory <|.. ElitePlusEnemyFactory
+EnemyFactory <|.. EliteProEnemyFactory
+
+MobEnemyFactory ..> MobEnemy : 创建\nMobEnemy
+EliteEnemyFactory ..> EliteEnemy : 创建\nEliteEnemy
+ElitePlusEnemyFactory ..> ElitePlusEnemy : 创建\nElitePlusEnemy
+EliteProEnemyFactory ..> EliteProEnemy : 创建\nEliteProEnemy
+
+Game ..> EnemyFactory : 依赖工厂接口\n创建敌机
+EnemyFactory ..> AbstractEnemy : 返回\n敌机抽象产品
+
+note top of EnemyFactory
+  工厂方法（Factory Method）：
+  在工厂接口中声明 createEnemy，
+  由不同的具体工厂子类决定
+  实例化哪一种具体敌机。
+  客户端（Game）依赖 EnemyFactory 抽象，
+  可以在不修改 Game 的前提下扩展新敌机类型。
+end note
+
+@enduml
