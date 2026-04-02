@@ -36,6 +36,8 @@ public class Game extends JPanel {
 
     private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyFactory eliteEnemyFactory = new EliteEnemyFactory();
+    private final EnemyFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
+    private final EnemyFactory eliteProEnemyFactory = new EliteProEnemyFactory();
 
     // 屏幕中出现的敌机最大数量
     private final int enemyMaxNumber = 5;
@@ -85,10 +87,14 @@ public class Game extends JPanel {
                     if (enemyAircrafts.size() < enemyMaxNumber) {
                         double random = Math.random();
                         EnemyFactory enemyFactory;
-                        if (random < 0.6) {
+                        if (random < 0.4) {
                             enemyFactory = mobEnemyFactory;
-                        } else {
+                        } else if (random < 0.7) {
                             enemyFactory = eliteEnemyFactory;
+                        } else if (random < 0.9) {
+                            enemyFactory = elitePlusEnemyFactory;
+                        } else {
+                            enemyFactory = eliteProEnemyFactory;
                         }
                         enemyAircrafts.add(enemyFactory.createEnemy());
                     }

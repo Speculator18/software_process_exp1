@@ -1,5 +1,6 @@
 package edu.hitsz.aircraft;
 
+import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 
 import java.util.LinkedList;
@@ -14,6 +15,9 @@ public class EliteProEnemy extends AbstractEnemy {
     @Override
     public void forward() {
         super.forward();
+        if (locationX <= getWidth() / 2 || locationX >= Main.WINDOW_WIDTH - getWidth() / 2) {
+            speedX = -speedX;
+        }
     }
 
     @Override
@@ -21,4 +25,3 @@ public class EliteProEnemy extends AbstractEnemy {
         return new LinkedList<>();
     }
 }
-
