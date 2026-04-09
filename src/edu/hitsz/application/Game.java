@@ -34,11 +34,12 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
 
-    // 四种敌机工厂：通过工厂方法模式创建不同类型敌机
+    // 敌机工厂：通过工厂方法模式创建不同类型敌机
     private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyFactory eliteEnemyFactory = new EliteEnemyFactory();
     private final EnemyFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
     private final EnemyFactory eliteProEnemyFactory = new EliteProEnemyFactory();
+    private final EnemyFactory bossEnemyFactory = new BossEnemyFactory();
 
     // 屏幕中出现的敌机最大数量
     private final int enemyMaxNumber = 5;
@@ -53,6 +54,10 @@ public class Game extends JPanel {
 
     // 当前玩家分数
     private int score = 0;
+
+    // Boss 生成控制
+    private final int bossScoreThreshold = 200;
+    private boolean bossGenerated = false;
 
     // 游戏结束标志
     private boolean gameOverFlag = false;
@@ -87,7 +92,6 @@ public class Game extends JPanel {
                     enemySpawnCounter = 0;
                     if (enemyAircrafts.size() < enemyMaxNumber) {
                         double random = Math.random();
-                        // 按概率在四种敌机工厂中选择一种，保证四种敌机按周期随机出现
                         EnemyFactory enemyFactory;
                         if (random < 0.4) {
                             enemyFactory = mobEnemyFactory;
@@ -100,6 +104,11 @@ public class Game extends JPanel {
                         }
                         enemyAircrafts.add(enemyFactory.createEnemy());
                     }
+                }
+
+                if (!bossGenerated && score >= bossScoreThreshold) {
+                    enemyAircrafts.add(bossEnemyFactory.createEnemy());
+                    bossGenerated = true;
                 }
 
                 // 飞机发射子弹
