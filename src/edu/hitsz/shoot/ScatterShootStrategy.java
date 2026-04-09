@@ -43,4 +43,3 @@ public class ScatterShootStrategy implements ShootStrategy {
         return new LinkedList<>();
     }
 }
-

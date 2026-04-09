@@ -198,29 +198,38 @@ public class Game extends JPanel {
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
                         score += 10;
-                        double random = Math.random();
-                        // 高级敌机（精英 / 精锐 / 王牌）按一定概率掉落道具
-                        if (random < 0.5) {
+                        if (enemyAircraft instanceof BossEnemy) {
                             int x = enemyAircraft.getLocationX();
                             int y = enemyAircraft.getLocationY();
                             int speedX = 0;
                             int speedY = 3;
-                            // 根据敌机类型决定可掉落道具种类数：
-                            // Elite 敌机掉落 3 种，ElitePlus 掉落 4 种，ElitePro 掉落 5 种
-                            int typeCount;
-                            if (enemyAircraft instanceof EliteEnemy) {
-                                typeCount = 3;
-                            } else if (enemyAircraft instanceof ElitePlusEnemy) {
-                                typeCount = 4;
-                            } else if (enemyAircraft instanceof EliteProEnemy) {
-                                typeCount = 5;
-                            } else {
-                                typeCount = 0;
-                            }
-                            if (typeCount > 0) {
-                                int type = (int) (Math.random() * typeCount);
+                            for (int i = 0; i < 3; i++) {
+                                int type = (int) (Math.random() * 5);
                                 AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
                                 props.add(prop);
+                            }
+                        } else {
+                            double random = Math.random();
+                            if (random < 0.5) {
+                                int x = enemyAircraft.getLocationX();
+                                int y = enemyAircraft.getLocationY();
+                                int speedX = 0;
+                                int speedY = 3;
+                                int typeCount;
+                                if (enemyAircraft instanceof EliteEnemy) {
+                                    typeCount = 3;
+                                } else if (enemyAircraft instanceof ElitePlusEnemy) {
+                                    typeCount = 4;
+                                } else if (enemyAircraft instanceof EliteProEnemy) {
+                                    typeCount = 5;
+                                } else {
+                                    typeCount = 0;
+                                }
+                                if (typeCount > 0) {
+                                    int type = (int) (Math.random() * typeCount);
+                                    AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
+                                    props.add(prop);
+                                }
                             }
                         }
                     }

@@ -34,4 +34,3 @@ public class RingShootStrategy implements ShootStrategy {
         return res;
     }
 }
-
