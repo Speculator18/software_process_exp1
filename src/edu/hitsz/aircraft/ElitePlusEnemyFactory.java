@@ -16,6 +16,8 @@ public class ElitePlusEnemyFactory implements EnemyFactory {
         int speedX = 3;
         int speedY = 7;
         int hp = 80;
-        return new ElitePlusEnemy(x, y, speedX, speedY, hp);
+        ElitePlusEnemy enemy = new ElitePlusEnemy(x, y, speedX, speedY, hp);
+        enemy.setShootStrategy(new edu.hitsz.shoot.DoubleDirectShootStrategy());
+        return enemy;
     }
 }

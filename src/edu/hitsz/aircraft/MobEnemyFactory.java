@@ -16,6 +16,8 @@ public class MobEnemyFactory implements EnemyFactory {
         int speedX = 0;
         int speedY = 10;
         int hp = 30;
-        return new MobEnemy(x, y, speedX, speedY, hp);
+        MobEnemy enemy = new MobEnemy(x, y, speedX, speedY, hp);
+        enemy.setShootStrategy(new edu.hitsz.shoot.NoShootStrategy());
+        return enemy;
     }
 }

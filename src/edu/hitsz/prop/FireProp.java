@@ -1,6 +1,7 @@
 package edu.hitsz.prop;
 
 import edu.hitsz.aircraft.HeroAircraft;
+import edu.hitsz.shoot.ScatterShootStrategy;
 
 public class FireProp extends AbstractProp {
 
@@ -10,7 +11,7 @@ public class FireProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
-        // 火力道具：提示火力提升（具体策略在后续实验中实现）
+        heroAircraft.setShootStrategy(new ScatterShootStrategy());
         System.out.println("FireSupply active!");
     }
 }
