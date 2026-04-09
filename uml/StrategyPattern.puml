@@ -1,0 +1,132 @@
+@startuml
+title 策略模式（飞机弹道系统）
+
+package "Aircraft (Context)" {
+
+    abstract class AbstractAircraft <<Context>> {
+        - maxHp: int
+        - hp: int
+        - shootStrategy: ShootStrategy
+
+        + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+        + setShootStrategy(strategy: ShootStrategy): void
+        + shoot(): java.util.List<BaseBullet>
+        + decreaseHp(decrease: int): void
+        + increaseHp(increase: int): void
+        + getHp(): int
+        + getMaxHp(): int
+    }
+
+    abstract class AbstractEnemy {
+        + AbstractEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+    }
+
+    class HeroAircraft {
+        - static instance: HeroAircraft
+        - shootNum: int
+        - power: int
+        - direction: int
+        + getInstance(): HeroAircraft
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+
+    class MobEnemy {
+        + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+
+    class EliteEnemy {
+        + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+
+    class ElitePlusEnemy {
+        + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+
+    class EliteProEnemy {
+        + EliteProEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+
+    class BossEnemy {
+        + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+        + forward(): void
+        + shoot(): java.util.List<BaseBullet>
+    }
+}
+
+package "Shoot Strategy" {
+
+    interface ShootStrategy <<Strategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+
+    class NoShootStrategy <<ConcreteStrategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+
+    class DirectShootStrategy <<ConcreteStrategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+
+    class DoubleDirectShootStrategy <<ConcreteStrategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+
+    class ScatterShootStrategy <<ConcreteStrategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+
+    class RingShootStrategy <<ConcreteStrategy>> {
+        + shoot(aircraft: AbstractAircraft): java.util.List<BaseBullet>
+    }
+}
+
+package "Prop (Client)" {
+
+    abstract class AbstractProp {
+        + AbstractProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(heroAircraft: HeroAircraft): void
+    }
+
+    class FireProp <<Client>> {
+        + FireProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(heroAircraft: HeroAircraft): void
+    }
+
+    class FirePlusProp <<Client>> {
+        + FirePlusProp(int locationX, int locationY, int speedX, int speedY)
+        + activate(heroAircraft: HeroAircraft): void
+    }
+}
+
+AbstractAircraft <|-- HeroAircraft
+AbstractAircraft <|-- AbstractEnemy
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- ElitePlusEnemy
+AbstractEnemy <|-- EliteProEnemy
+AbstractEnemy <|-- BossEnemy
+
+ShootStrategy <|.. NoShootStrategy
+ShootStrategy <|.. DirectShootStrategy
+ShootStrategy <|.. DoubleDirectShootStrategy
+ShootStrategy <|.. ScatterShootStrategy
+ShootStrategy <|.. RingShootStrategy
+
+AbstractAircraft o--> ShootStrategy : shootStrategy
+
+FireProp ..> HeroAircraft : activate(...)
+FirePlusProp ..> HeroAircraft : activate(...)
+FireProp ..> ScatterShootStrategy : 切换为散射弹道
+FirePlusProp ..> RingShootStrategy : 切换为环射弹道
+
+@enduml
