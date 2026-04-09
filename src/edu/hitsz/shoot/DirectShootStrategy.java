@@ -9,7 +9,12 @@ import edu.hitsz.bullet.HeroBullet;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 单排直射弹道策略：
+ * 英雄机默认使用的直射弹道，同时用于精英敌机的单发直射攻击。
+ */
 public class DirectShootStrategy implements ShootStrategy {
+
     @Override
     public List<BaseBullet> shoot(AbstractAircraft aircraft) {
         if (aircraft instanceof HeroAircraft) {
@@ -35,10 +40,8 @@ public class DirectShootStrategy implements ShootStrategy {
             int speedX = 0;
             int speedY = enemy.getSpeedY() + 5;
             int power = 20;
-            res.add(new EnemyBullet(x, y, speedX, speedY, power));
-            return res;
+ 
         }
         return new LinkedList<>();
     }
 }
-

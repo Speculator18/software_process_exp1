@@ -34,7 +34,8 @@ public class Game extends JPanel {
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
 
-    // 敌机工厂：通过工厂方法模式创建不同类型敌机
+    // 敌机工厂：通过工厂方法模式创建不同类型敌机，
+    // 并在各工厂中为敌机绑定对应的弹道策略。
     private final EnemyFactory mobEnemyFactory = new MobEnemyFactory();
     private final EnemyFactory eliteEnemyFactory = new EliteEnemyFactory();
     private final EnemyFactory elitePlusEnemyFactory = new ElitePlusEnemyFactory();
@@ -44,18 +45,18 @@ public class Game extends JPanel {
     // 屏幕中出现的敌机最大数量
     private final int enemyMaxNumber = 5;
 
-    // 敌机生成周期
+    // 敌机生成周期（单位：帧计数）
     protected double enemySpawnCycle = 20;
     private int enemySpawnCounter = 0;
 
-    // 英雄机和敌机射击周期
+    // 英雄机和敌机射击周期（单位：帧计数）
     protected double shootCycle = 20;
     private int shootCounter = 0;
 
     // 当前玩家分数
     private int score = 0;
 
-    // Boss 生成控制
+    // Boss 生成控制：当分数达到阈值且尚未生成 Boss 时，触发一次 Boss 出现
     private final int bossScoreThreshold = 200;
     private boolean bossGenerated = false;
 
@@ -87,6 +88,7 @@ public class Game extends JPanel {
             @Override
             public void run() {
 
+                // 按固定周期生成普通敌机
                 enemySpawnCounter++;
                 if (enemySpawnCounter >= enemySpawnCycle) {
                     enemySpawnCounter = 0;
@@ -106,6 +108,7 @@ public class Game extends JPanel {
                     }
                 }
 
+                // 分数达到阈值后只生成一次 Boss 敌机
                 if (!bossGenerated && score >= bossScoreThreshold) {
                     enemyAircrafts.add(bossEnemyFactory.createEnemy());
                     bossGenerated = true;
@@ -197,8 +200,10 @@ public class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
+                        // 击毁任意敌机后增加分数
                         score += 10;
                         if (enemyAircraft instanceof BossEnemy) {
+                            // Boss 被击毁时：随机掉落 3 个道具（类型无限制）
                             int x = enemyAircraft.getLocationX();
                             int y = enemyAircraft.getLocationY();
                             int speedX = 0;
@@ -209,6 +214,7 @@ public class Game extends JPanel {
                                 props.add(prop);
                             }
                         } else {
+                            // 高级敌机（精英 / 精锐 / 王牌）按一定概率掉落 1 个道具
                             double random = Math.random();
                             if (random < 0.5) {
                                 int x = enemyAircraft.getLocationX();

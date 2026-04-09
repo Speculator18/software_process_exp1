@@ -9,7 +9,13 @@ import edu.hitsz.bullet.HeroBullet;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 散射弹道策略：
+ * 英雄机在获得火力道具后使用的扇形散射弹道，
+ * 同时用于王牌敌机的三向散射攻击。
+ */
 public class ScatterShootStrategy implements ShootStrategy {
+
     @Override
     public List<BaseBullet> shoot(AbstractAircraft aircraft) {
         if (aircraft instanceof HeroAircraft) {

@@ -7,9 +7,9 @@ import edu.hitsz.shoot.DirectShootStrategy;
 import java.util.List;
 
 /**
- * 英雄飞机，游戏玩家操控
- * 
- * @author hitsz
+ * 英雄飞机，游戏玩家操控。
+ * 同时作为策略模式中的一个具体 Context：
+ * 通过 setShootStrategy 切换不同的弹道策略。
  */
 public class HeroAircraft extends AbstractAircraft {
 
@@ -23,6 +23,9 @@ public class HeroAircraft extends AbstractAircraft {
         super(locationX, locationY, speedX, speedY, hp);
     }
 
+    /**
+     * 单例模式获取英雄机实例，并在创建时绑定默认直射弹道策略。
+     */
     public static HeroAircraft getInstance() {
         if (instance == null) {
             synchronized (HeroAircraft.class) {

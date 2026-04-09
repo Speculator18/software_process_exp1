@@ -4,6 +4,10 @@ import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
 import edu.hitsz.shoot.RingShootStrategy;
 
+/**
+ * Boss 敌机工厂：
+ * 负责在屏幕上方生成 Boss，并为其绑定环射弹道策略。
+ */
 public class BossEnemyFactory implements EnemyFactory {
 
     @Override
@@ -18,4 +22,3 @@ public class BossEnemyFactory implements EnemyFactory {
         return boss;
     }
 }
-

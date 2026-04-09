@@ -7,7 +7,12 @@ import edu.hitsz.bullet.EnemyBullet;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 双排直射弹道策略：
+ * 精锐敌机在机体左右两侧各发射一颗直射子弹。
+ */
 public class DoubleDirectShootStrategy implements ShootStrategy {
+
     @Override
     public List<BaseBullet> shoot(AbstractAircraft aircraft) {
         if (aircraft instanceof ElitePlusEnemy) {
@@ -19,10 +24,8 @@ public class DoubleDirectShootStrategy implements ShootStrategy {
             int speedY = enemy.getSpeedY() + 5;
             int power = 20;
             res.add(new EnemyBullet(baseX - offsetX, y, 0, speedY, power));
-            res.add(new EnemyBullet(baseX + offsetX, y, 0, speedY, power));
-            return res;
+ 
         }
         return new LinkedList<>();
     }
 }
-

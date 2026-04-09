@@ -6,9 +6,9 @@ import edu.hitsz.shoot.ShootStrategy;
 import java.util.List;
 
 /**
- * 所有种类飞机的抽象父类
- * 
- * @author hitsz
+ * 所有种类飞机的抽象父类（Context）：
+ * 负责维护生命值等通用状态，并组合一个 ShootStrategy，
+ * 将具体的弹道算法委托给策略对象实现。
  */
 public abstract class AbstractAircraft extends AbstractFlyingObject {
 
@@ -45,10 +45,21 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         }
     }
 
+    /**
+     * 设置当前使用的弹道策略。
+     *
+     * @param shootStrategy 具体的弹道策略实现
+     */
     public void setShootStrategy(ShootStrategy shootStrategy) {
         this.shootStrategy = shootStrategy;
     }
 
+    /**
+     * 统一的射击方法：
+     * 由当前绑定的 ShootStrategy 决定如何生成子弹。
+     *
+     * @return 本次射击产生的子弹列表，若未设置策略则返回空列表
+     */
     public List<BaseBullet> shoot() {
         if (shootStrategy == null) {
             return java.util.Collections.emptyList();
