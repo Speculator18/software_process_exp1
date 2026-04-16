@@ -5,6 +5,10 @@ import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.prop.AbstractProp;
 import edu.hitsz.prop.PropFactory;
+import edu.hitsz.rank.FileScoreDao;
+import edu.hitsz.rank.GameDifficulty;
+import edu.hitsz.rank.ScoreDao;
+import edu.hitsz.rank.ScoreService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +67,8 @@ public class Game extends JPanel {
     // 游戏结束标志
     private boolean gameOverFlag = false;
 
+    private final ScoreService scoreService;
+
     public Game() {
         heroAircraft = HeroAircraft.getInstance();
 
@@ -76,6 +82,10 @@ public class Game extends JPanel {
 
         this.timer = new Timer("game-action-timer", true);
 
+        GameDifficulty gameDifficulty = GameDifficulty.EASY;
+        String filePath = "scores_easy.txt";
+        ScoreDao scoreDao = new FileScoreDao(gameDifficulty, filePath);
+        scoreService = new ScoreService(gameDifficulty, scoreDao, "player");
     }
 
     /**
@@ -281,6 +291,8 @@ public class Game extends JPanel {
             timer.cancel(); // 取消定时器并终止所有调度任务
             gameOverFlag = true;
             System.out.println("Game Over!");
+            scoreService.saveScore(score);
+            scoreService.printRanking();
         }
     };
 
