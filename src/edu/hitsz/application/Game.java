@@ -67,6 +67,10 @@ public class Game extends JPanel {
     // 游戏结束标志
     private boolean gameOverFlag = false;
 
+    /**
+     * 排行榜业务服务。
+     * 负责在游戏结束时保存得分并打印排行榜，具体持久化细节由 DAO 层实现。
+     */
     private final ScoreService scoreService;
 
     public Game() {
@@ -82,9 +86,13 @@ public class Game extends JPanel {
 
         this.timer = new Timer("game-action-timer", true);
 
+        // 当前实验阶段暂时使用固定难度 EASY，
+        // 对应的排行榜记录保存在 scores_easy.txt 文件中。
         GameDifficulty gameDifficulty = GameDifficulty.EASY;
         String filePath = "scores_easy.txt";
+        // 通过 DAO 层隔离具体文件操作
         ScoreDao scoreDao = new FileScoreDao(gameDifficulty, filePath);
+        // ScoreService 负责封装与排行榜相关的业务逻辑
         scoreService = new ScoreService(gameDifficulty, scoreDao, "player");
     }
 
@@ -291,6 +299,7 @@ public class Game extends JPanel {
             timer.cancel(); // 取消定时器并终止所有调度任务
             gameOverFlag = true;
             System.out.println("Game Over!");
+            // 游戏结束时将本局得分持久化并输出当前难度的排行榜
             scoreService.saveScore(score);
             scoreService.printRanking();
         }
