@@ -1,0 +1,70 @@
+@startuml
+
+package "edu.hitsz.application" {
+    class Game {
+        - scoreService: edu.hitsz.rank.ScoreService
+        ..methods..
+        + action(): void
+    }
+}
+
+package "edu.hitsz.rank" {
+    enum GameDifficulty {
+        EASY
+        MEDIUM
+        HARD
+    }
+
+    class ScoreRecord {
+        - playerName: String
+        - score: int
+        - recordTime: java.time.LocalDateTime
+        --
+        + ScoreRecord(playerName: String, score: int, recordTime: java.time.LocalDateTime)
+        + getPlayerName(): String
+        + setPlayerName(name: String): void
+        + getScore(): int
+        + setScore(score: int): void
+        + getRecordTime(): java.time.LocalDateTime
+        + setRecordTime(time: java.time.LocalDateTime): void
+    }
+
+    interface ScoreDao {
+        + getAll(): java.util.List<ScoreRecord>
+        + add(record: ScoreRecord): void
+        + delete(record: ScoreRecord): void
+    }
+
+    class FileScoreDao {
+        - gameDifficulty: GameDifficulty
+        - filePath: String
+        --
+        + FileScoreDao(difficulty: GameDifficulty, filePath: String)
+        + getAll(): java.util.List<ScoreRecord>
+        + add(record: ScoreRecord): void
+        + delete(record: ScoreRecord): void
+    }
+
+    class ScoreService {
+        - scoreDao: ScoreDao
+        - gameDifficulty: GameDifficulty
+        - defaultPlayerName: String
+        --
+        + ScoreService(gameDifficulty: GameDifficulty, scoreDao: ScoreDao, defaultPlayerName: String)
+        + saveScore(score: int): void
+        + getSortedRecords(): java.util.List<ScoreRecord>
+        + printRanking(): void
+    }
+}
+
+Game --> ScoreService : uses
+ScoreService *-- ScoreDao
+ScoreService --> ScoreRecord
+ScoreService --> GameDifficulty
+ScoreDao --> ScoreRecord
+FileScoreDao ..|> ScoreDao
+FileScoreDao --> GameDifficulty
+FileScoreDao --> ScoreRecord
+
+@enduml
+
