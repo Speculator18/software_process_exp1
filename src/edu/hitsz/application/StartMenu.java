@@ -5,6 +5,7 @@ import edu.hitsz.rank.GameDifficulty;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -65,6 +66,20 @@ public class StartMenu extends JPanel {
         centerPanel.add(hardButton);
         centerPanel.add(Box.createVerticalGlue());
         add(centerPanel, BorderLayout.CENTER);
+
+        JCheckBox soundCheckBox = new JCheckBox("开启音效", true);
+        soundCheckBox.setOpaque(false);
+        soundCheckBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setOpaque(false);
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+        bottomPanel.add(Box.createHorizontalGlue());
+        bottomPanel.add(soundCheckBox);
+        bottomPanel.add(Box.createHorizontalGlue());
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        SoundManager.setEnabled(true);
+        soundCheckBox.addActionListener(e -> SoundManager.setEnabled(soundCheckBox.isSelected()));
 
         easyButton.addActionListener(e -> Main.startGame(GameDifficulty.EASY));
         mediumButton.addActionListener(e -> Main.startGame(GameDifficulty.MEDIUM));

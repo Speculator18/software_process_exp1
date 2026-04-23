@@ -125,6 +125,10 @@ public class Game extends JPanel {
         }
         ScoreDao scoreDao = new FileScoreDao(gameDifficulty, filePath);
         scoreService = new ScoreService(gameDifficulty, scoreDao, "player");
+
+        if (SoundManager.isEnabled()) {
+            MusicManager.startBackgroundMusic();
+        }
     }
 
     /**
@@ -161,6 +165,9 @@ public class Game extends JPanel {
                 if (!bossGenerated && score >= bossScoreThreshold) {
                     enemyAircrafts.add(bossEnemyFactory.createEnemy());
                     bossGenerated = true;
+                    if (SoundManager.isEnabled()) {
+                        MusicManager.startBossMusic();
+                    }
                 }
 
                 // 飞机发射子弹
@@ -249,6 +256,7 @@ public class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
+                        SoundManager.playBulletHit();
                         // 击毁任意敌机后增加分数
                         score += 10;
                         if (enemyAircraft instanceof BossEnemy) {
@@ -261,6 +269,10 @@ public class Game extends JPanel {
                                 int type = (int) (Math.random() * 5);
                                 AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
                                 props.add(prop);
+                            }
+                            MusicManager.stopBossMusic();
+                            if (SoundManager.isEnabled()) {
+                                MusicManager.startBackgroundMusic();
                             }
                         } else {
                             // 高级敌机（精英 / 精锐 / 王牌）按一定概率掉落 1 个道具
@@ -302,6 +314,7 @@ public class Game extends JPanel {
                 continue;
             }
             if (heroAircraft.crash(prop) || prop.crash(heroAircraft)) {
+                SoundManager.playGetSupply();
                 prop.activate(heroAircraft);
                 prop.vanish();
             }
@@ -330,6 +343,10 @@ public class Game extends JPanel {
             timer.cancel(); // 取消定时器并终止所有调度任务
             gameOverFlag = true;
             System.out.println("Game Over!");
+            MusicManager.stopAll();
+            if (SoundManager.isEnabled()) {
+                SoundManager.playGameOver();
+            }
             // 游戏结束时将本局得分持久化并输出当前难度的排行榜
             scoreService.saveScore(score);
             scoreService.printRanking();
