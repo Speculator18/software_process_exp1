@@ -17,6 +17,7 @@ public class Main {
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
 
+    // E5 使用 CardLayout 管理开始菜单、游戏界面和排行榜等多个界面
     public static final CardLayout CARD_LAYOUT = new CardLayout();
     public static final JPanel MAIN_PANEL = new JPanel(CARD_LAYOUT);
 
@@ -32,6 +33,7 @@ public class Main {
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        // E5 将主面板加入窗口，后续通过 CARD_LAYOUT 切换不同界面
         frame.add(MAIN_PANEL);
         StartMenu startMenu = new StartMenu();
         MAIN_PANEL.add(startMenu, "StartMenu");
@@ -39,6 +41,7 @@ public class Main {
         frame.setVisible(true);
     }
 
+    // E5 由开始菜单调用，根据难度创建游戏面板并切换到游戏界面
     public static void startGame(GameDifficulty difficulty) {
         Game game = new Game(difficulty);
         MAIN_PANEL.add(game, "Game");

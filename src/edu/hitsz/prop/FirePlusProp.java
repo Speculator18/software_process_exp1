@@ -15,6 +15,7 @@ public class FirePlusProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        // E5 超级火力道具：临时切换为环射弹道，持续 5 秒后恢复直射
         heroAircraft.applyShootStrategyForDuration(new RingShootStrategy(), 5000);
         System.out.println("FirePlusSupply active!");
     }

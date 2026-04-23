@@ -18,6 +18,7 @@ public class HeroAircraft extends AbstractAircraft {
     private int power = 30;
     private int direction = -1;
 
+    // E5 记录火力增益的版本号，用于解决多个火力道具叠加时的计时覆盖问题
     private int fireBuffVersion = 0;
 
     private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
@@ -44,6 +45,7 @@ public class HeroAircraft extends AbstractAircraft {
         return instance;
     }
 
+    // E5 将弹道策略临时切换为指定策略，并在 millis 毫秒后自动恢复直射弹道
     public void applyShootStrategyForDuration(ShootStrategy strategy, long millis) {
         setShootStrategy(strategy);
         fireBuffVersion++;
@@ -57,6 +59,7 @@ public class HeroAircraft extends AbstractAircraft {
                 setShootStrategy(new DirectShootStrategy());
             }
         };
+        // E5 通过独立线程计时，避免阻塞游戏主循环
         new Thread(task, "hero-fire-buff-" + currentVersion).start();
     }
 

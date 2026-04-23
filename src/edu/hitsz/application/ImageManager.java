@@ -54,6 +54,7 @@ public class ImageManager {
     static {
         try {
 
+            // E5 根据难度预先加载默认背景图，便于开始菜单和游戏界面复用
             setBackground(GameDifficulty.EASY);
 
             HERO_IMAGE = ImageIO.read(new FileInputStream("src/images/hero.png"));
@@ -90,6 +91,7 @@ public class ImageManager {
         }
     }
 
+    // E5 按游戏难度切换不同的背景图片资源
     public static void setBackground(GameDifficulty difficulty) throws IOException {
         String path;
         switch (difficulty) {

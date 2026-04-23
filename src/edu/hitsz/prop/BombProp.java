@@ -12,6 +12,7 @@ public class BombProp extends AbstractProp {
     @Override
     public void activate(HeroAircraft heroAircraft) {
         System.out.println("BombSupply active!");
+        // E5 炸弹道具生效时播放爆炸音效
         SoundManager.playBombExplosion();
     }
 }

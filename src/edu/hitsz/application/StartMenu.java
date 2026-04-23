@@ -17,10 +17,12 @@ import java.awt.Graphics;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
+// E5 实验五：难度选择和音效开关的开始菜单界面
 public class StartMenu extends JPanel {
 
     public StartMenu() {
         setLayout(new BorderLayout());
+        // E5 给菜单增加统一内边距，使内容在窗口中居中展示
         setBorder(new EmptyBorder(40, 40, 40, 40));
 
         JLabel titleLabel = new JLabel("选择游戏难度", SwingConstants.CENTER);
@@ -67,6 +69,7 @@ public class StartMenu extends JPanel {
         centerPanel.add(Box.createVerticalGlue());
         add(centerPanel, BorderLayout.CENTER);
 
+        // E5 音效开关，受实验五要求控制是否播放背景音乐与音效
         JCheckBox soundCheckBox = new JCheckBox("开启音效", true);
         soundCheckBox.setOpaque(false);
         soundCheckBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
@@ -78,6 +81,7 @@ public class StartMenu extends JPanel {
         bottomPanel.add(Box.createHorizontalGlue());
         add(bottomPanel, BorderLayout.SOUTH);
 
+        // E5 默认开启音效，并根据复选框勾选状态动态开启/关闭
         SoundManager.setEnabled(true);
         soundCheckBox.addActionListener(e -> SoundManager.setEnabled(soundCheckBox.isSelected()));
 
@@ -97,6 +101,7 @@ public class StartMenu extends JPanel {
                         RenderingHints.KEY_INTERPOLATION,
                         RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             }
+            // E5 在开始菜单中铺满当前难度对应的背景图，营造统一视觉风格
             g2.drawImage(background, 0, 0, getWidth(), getHeight(), null);
             g2.dispose();
         }

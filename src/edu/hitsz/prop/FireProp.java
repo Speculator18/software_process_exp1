@@ -15,6 +15,7 @@ public class FireProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
+        // E5 普通火力道具：将英雄机弹道切换为散射，并在 5 秒后自动恢复直射
         heroAircraft.applyShootStrategyForDuration(new ScatterShootStrategy(), 5000);
         System.out.println("FireSupply active!");
     }

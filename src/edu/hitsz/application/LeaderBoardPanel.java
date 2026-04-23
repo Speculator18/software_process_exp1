@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
+// E5 实验五：使用 JTable 展示并管理当前难度下的得分排行榜
 public class LeaderBoardPanel extends JPanel {
 
     private final ScoreService scoreService;
@@ -27,10 +28,12 @@ public class LeaderBoardPanel extends JPanel {
         this.scoreService = scoreService;
         setLayout(new BorderLayout());
 
+        // E5 顶部标题显示当前难度，方便对不同难度的成绩进行区分
         JLabel titleLabel = new JLabel("得分排行榜 - 难度: " + scoreService.getGameDifficulty(), SwingConstants.CENTER);
         titleLabel.setFont(new Font("SansSerif", Font.BOLD, 26));
         add(titleLabel, BorderLayout.NORTH);
 
+        // E5 按实验要求，表格列包含名次、玩家名、得分和记录时间
         String[] columnNames = {"名次", "玩家名", "得分", "记录时间"};
         model = new DefaultTableModel(columnNames, 0) {
             @Override
@@ -51,12 +54,15 @@ public class LeaderBoardPanel extends JPanel {
         bottomPanel.add(backButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        // E5 删除按钮支持移除任意一条历史记录
         deleteButton.addActionListener(e -> deleteSelectedRecord());
+        // E5 返回按钮让玩家可以从排行榜回到开始菜单
         backButton.addActionListener(e -> Main.CARD_LAYOUT.show(Main.MAIN_PANEL, "StartMenu"));
 
         refreshTable();
     }
 
+    // E5 从服务层获取排序后的记录并刷新表格内容
     private void refreshTable() {
         records = scoreService.getSortedRecords();
         model.setRowCount(0);
@@ -73,6 +79,7 @@ public class LeaderBoardPanel extends JPanel {
         }
     }
 
+    // E5 删除当前选中行对应的得分记录，并更新文件与表格
     private void deleteSelectedRecord() {
         int row = table.getSelectedRow();
         if (row == -1) {
@@ -89,4 +96,3 @@ public class LeaderBoardPanel extends JPanel {
         refreshTable();
     }
 }
-

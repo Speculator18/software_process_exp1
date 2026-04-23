@@ -13,12 +13,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+// E5 实验五：负责在独立线程中播放背景音乐的工具类
 public class MusicThread extends Thread {
 
     private final String filename;
     private AudioFormat audioFormat;
     private byte[] samples;
     private final boolean loop;
+    // E5 running 标志用于在不强制停止线程的情况下优雅结束播放循环
     private volatile boolean running = true;
 
     public MusicThread(String filename, boolean loop) {
@@ -27,6 +29,7 @@ public class MusicThread extends Thread {
         loadMusic();
     }
 
+    // E5 预先将音频文件读入内存，避免循环播放时反复访问磁盘
     private void loadMusic() {
         try {
             AudioInputStream stream = AudioSystem.getAudioInputStream(new File(filename));
@@ -37,6 +40,7 @@ public class MusicThread extends Thread {
         }
     }
 
+    // E5 将整段音频数据读取为字节数组，供重复播放使用
     private byte[] getSamples(AudioInputStream stream) throws IOException {
         int size = (int) (stream.getFrameLength() * audioFormat.getFrameSize());
         byte[] data = new byte[size];
@@ -45,6 +49,7 @@ public class MusicThread extends Thread {
         return data;
     }
 
+    // E5 从给定输入流持续读取音频数据并写入音频输出行
     private void play(InputStream source) {
         int size = (int) (audioFormat.getFrameSize() * audioFormat.getSampleRate());
         byte[] buffer = new byte[size];
@@ -75,6 +80,7 @@ public class MusicThread extends Thread {
         dataLine.close();
     }
 
+    // E5 外部调用该方法即可让循环播放线程在下一轮自然结束
     public void stopMusic() {
         running = false;
     }

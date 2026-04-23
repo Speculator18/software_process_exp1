@@ -104,6 +104,7 @@ public class Game extends JPanel {
         this.timer = new Timer("game-action-timer", true);
 
         try {
+            // E5 根据难度切换背景图，使不同模式有不同地图效果
             ImageManager.setBackground(gameDifficulty);
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,6 +127,7 @@ public class Game extends JPanel {
         ScoreDao scoreDao = new FileScoreDao(gameDifficulty, filePath);
         scoreService = new ScoreService(gameDifficulty, scoreDao, "player");
 
+        // E5 游戏开始时根据音效开关决定是否开启普通背景音乐
         if (SoundManager.isEnabled()) {
             MusicManager.startBackgroundMusic();
         }
@@ -161,7 +163,7 @@ public class Game extends JPanel {
                     }
                 }
 
-                // 分数达到阈值后只生成一次 Boss 敌机
+                // E5 分数达到阈值后只生成一次 Boss 敌机，并切换到 Boss 背景音乐
                 if (!bossGenerated && score >= bossScoreThreshold) {
                     enemyAircrafts.add(bossEnemyFactory.createEnemy());
                     bossGenerated = true;
@@ -256,6 +258,7 @@ public class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
+                        // E5 敌机被击毁时播放命中音效
                         SoundManager.playBulletHit();
                         // 击毁任意敌机后增加分数
                         score += 10;
@@ -270,6 +273,7 @@ public class Game extends JPanel {
                                 AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY);
                                 props.add(prop);
                             }
+                            // E5 Boss 被击落后恢复普通背景音乐
                             MusicManager.stopBossMusic();
                             if (SoundManager.isEnabled()) {
                                 MusicManager.startBackgroundMusic();
@@ -314,6 +318,7 @@ public class Game extends JPanel {
                 continue;
             }
             if (heroAircraft.crash(prop) || prop.crash(heroAircraft)) {
+                // E5 英雄机获得任意补给时播放提示音效
                 SoundManager.playGetSupply();
                 prop.activate(heroAircraft);
                 prop.vanish();
@@ -334,15 +339,18 @@ public class Game extends JPanel {
         props.removeIf(AbstractFlyingObject::notValid);
     }
 
+    // E5 检查游戏是否结束，并在结束时弹出姓名输入框并跳转到排行榜界面
     private void checkResultAction() {
         if (heroAircraft.getHp() <= 0) {
             timer.cancel();
             gameOverFlag = true;
             System.out.println("Game Over!");
+            // E5 游戏结束时关闭所有背景音乐
             MusicManager.stopAll();
             if (SoundManager.isEnabled()) {
                 SoundManager.playGameOver();
             }
+            // E5 使用 SwingUtilities 将后续弹窗和界面切换安排到事件分发线程
             javax.swing.SwingUtilities.invokeLater(() -> {
                 String playerName = javax.swing.JOptionPane.showInputDialog(
                         this,
