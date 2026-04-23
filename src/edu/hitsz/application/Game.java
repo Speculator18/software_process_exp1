@@ -334,24 +334,32 @@ public class Game extends JPanel {
         props.removeIf(AbstractFlyingObject::notValid);
     }
 
-    /**
-     * 检查游戏是否结束，若结束：关闭线程池
-     */
     private void checkResultAction() {
-        // 游戏结束检查英雄机是否存活
         if (heroAircraft.getHp() <= 0) {
-            timer.cancel(); // 取消定时器并终止所有调度任务
+            timer.cancel();
             gameOverFlag = true;
             System.out.println("Game Over!");
             MusicManager.stopAll();
             if (SoundManager.isEnabled()) {
                 SoundManager.playGameOver();
             }
-            // 游戏结束时将本局得分持久化并输出当前难度的排行榜
-            scoreService.saveScore(score);
-            scoreService.printRanking();
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                String playerName = javax.swing.JOptionPane.showInputDialog(
+                        this,
+                        "请输入玩家姓名：",
+                        "记录成绩",
+                        javax.swing.JOptionPane.PLAIN_MESSAGE);
+                if (playerName != null && !playerName.trim().isEmpty()) {
+                    scoreService.saveScore(playerName.trim(), score);
+                } else {
+                    scoreService.saveScore(score);
+                }
+                LeaderBoardPanel panel = new LeaderBoardPanel(scoreService);
+                Main.MAIN_PANEL.add(panel, "LeaderBoard");
+                Main.CARD_LAYOUT.show(Main.MAIN_PANEL, "LeaderBoard");
+            });
         }
-    };
+    }
 
     // ***********************
     // Paint 各部分
