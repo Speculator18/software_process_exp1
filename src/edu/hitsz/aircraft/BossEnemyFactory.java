@@ -16,7 +16,7 @@ public class BossEnemyFactory implements EnemyFactory {
         int y = ImageManager.BOSS_ENEMY_IMAGE.getHeight();
         int speedX = 3;
         int speedY = 0;
-        int hp = 300;
+        int hp = 1200;
         BossEnemy boss = new BossEnemy(x, y, speedX, speedY, hp);
         boss.setShootStrategy(new RingShootStrategy());
         return boss;

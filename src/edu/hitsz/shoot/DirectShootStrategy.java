@@ -40,7 +40,9 @@ public class DirectShootStrategy implements ShootStrategy {
             int speedX = 0;
             int speedY = enemy.getSpeedY() + 5;
             int power = 20;
- 
+            BaseBullet bullet = new EnemyBullet(x, y, speedX, speedY, power);
+            res.add(bullet);
+            return res;
         }
         return new LinkedList<>();
     }

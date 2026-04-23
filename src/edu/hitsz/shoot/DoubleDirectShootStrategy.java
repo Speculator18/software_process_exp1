@@ -24,7 +24,8 @@ public class DoubleDirectShootStrategy implements ShootStrategy {
             int speedY = enemy.getSpeedY() + 5;
             int power = 20;
             res.add(new EnemyBullet(baseX - offsetX, y, 0, speedY, power));
- 
+            res.add(new EnemyBullet(baseX + offsetX, y, 0, speedY, power));
+            return res;
         }
         return new LinkedList<>();
     }
