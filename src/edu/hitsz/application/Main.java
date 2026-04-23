@@ -1,7 +1,12 @@
 package edu.hitsz.application;
 
-import javax.swing.*;
-import java.awt.*;
+import edu.hitsz.rank.GameDifficulty;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  * 程序入口
@@ -12,23 +17,32 @@ public class Main {
     public static final int WINDOW_WIDTH = 512;
     public static final int WINDOW_HEIGHT = 768;
 
+    public static final CardLayout CARD_LAYOUT = new CardLayout();
+    public static final JPanel MAIN_PANEL = new JPanel(CARD_LAYOUT);
+
     public static void main(String[] args) {
 
         System.out.println("Hello Aircraft War");
 
-        // 获得屏幕的分辨率，初始化 Frame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame frame = new JFrame("Aircraft War");
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setResizable(false);
-        //设置窗口的大小和位置,居中放置
         frame.setBounds(((int) screenSize.getWidth() - WINDOW_WIDTH) / 2, 0,
                 WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game game = new Game();
-        frame.add(game);
+        frame.add(MAIN_PANEL);
+        StartMenu startMenu = new StartMenu();
+        MAIN_PANEL.add(startMenu, "StartMenu");
+
         frame.setVisible(true);
+    }
+
+    public static void startGame(GameDifficulty difficulty) {
+        Game game = new Game(difficulty);
+        MAIN_PANEL.add(game, "Game");
+        CARD_LAYOUT.show(MAIN_PANEL, "Game");
         game.action();
     }
 }

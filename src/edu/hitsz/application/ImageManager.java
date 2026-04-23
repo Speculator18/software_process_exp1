@@ -13,6 +13,7 @@ import edu.hitsz.prop.BombProp;
 import edu.hitsz.prop.FirePlusProp;
 import edu.hitsz.prop.FireProp;
 import edu.hitsz.prop.FreezeProp;
+import edu.hitsz.rank.GameDifficulty;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -53,7 +54,7 @@ public class ImageManager {
     static {
         try {
 
-            BACKGROUND_IMAGE = ImageIO.read(new FileInputStream("src/images/bg.jpg"));
+            setBackground(GameDifficulty.EASY);
 
             HERO_IMAGE = ImageIO.read(new FileInputStream("src/images/hero.png"));
             MOB_ENEMY_IMAGE = ImageIO.read(new FileInputStream("src/images/mob.png"));
@@ -87,6 +88,23 @@ public class ImageManager {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    public static void setBackground(GameDifficulty difficulty) throws IOException {
+        String path;
+        switch (difficulty) {
+            case EASY:
+                path = "src/images/bg.jpg";
+                break;
+            case MEDIUM:
+                path = "src/images/bg3.jpg";
+                break;
+            case HARD:
+            default:
+                path = "src/images/bg5.jpg";
+                break;
+        }
+        BACKGROUND_IMAGE = ImageIO.read(new FileInputStream(path));
     }
 
     public static BufferedImage get(String className) {

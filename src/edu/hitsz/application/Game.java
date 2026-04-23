@@ -1,6 +1,17 @@
 package edu.hitsz.application;
 
-import edu.hitsz.aircraft.*;
+import edu.hitsz.aircraft.AbstractAircraft;
+import edu.hitsz.aircraft.BossEnemy;
+import edu.hitsz.aircraft.BossEnemyFactory;
+import edu.hitsz.aircraft.EliteEnemy;
+import edu.hitsz.aircraft.EliteEnemyFactory;
+import edu.hitsz.aircraft.ElitePlusEnemy;
+import edu.hitsz.aircraft.ElitePlusEnemyFactory;
+import edu.hitsz.aircraft.EliteProEnemy;
+import edu.hitsz.aircraft.EliteProEnemyFactory;
+import edu.hitsz.aircraft.EnemyFactory;
+import edu.hitsz.aircraft.HeroAircraft;
+import edu.hitsz.aircraft.MobEnemyFactory;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
 import edu.hitsz.prop.AbstractProp;
@@ -10,9 +21,12 @@ import edu.hitsz.rank.GameDifficulty;
 import edu.hitsz.rank.ScoreDao;
 import edu.hitsz.rank.ScoreService;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
@@ -73,7 +87,11 @@ public class Game extends JPanel {
      */
     private final ScoreService scoreService;
 
-    public Game() {
+    private final GameDifficulty gameDifficulty;
+
+    public Game(GameDifficulty gameDifficulty) {
+        this.gameDifficulty = gameDifficulty;
+
         heroAircraft = HeroAircraft.getInstance();
 
         enemyAircrafts = new LinkedList<>();
@@ -81,18 +99,31 @@ public class Game extends JPanel {
         enemyBullets = new LinkedList<>();
         props = new LinkedList<>();
 
-        // 启动英雄机鼠标监听
         new HeroController(this, heroAircraft);
 
         this.timer = new Timer("game-action-timer", true);
 
-        // 当前实验阶段暂时使用固定难度 EASY，
-        // 对应的排行榜记录保存在 scores_easy.txt 文件中。
-        GameDifficulty gameDifficulty = GameDifficulty.EASY;
-        String filePath = "scores_easy.txt";
-        // 通过 DAO 层隔离具体文件操作
+        try {
+            ImageManager.setBackground(gameDifficulty);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        String filePath;
+        switch (gameDifficulty) {
+            case EASY:
+                filePath = "scores_easy.txt";
+                break;
+            case MEDIUM:
+                filePath = "scores_medium.txt";
+                break;
+            case HARD:
+            default:
+                filePath = "scores_hard.txt";
+                break;
+        }
         ScoreDao scoreDao = new FileScoreDao(gameDifficulty, filePath);
-        // ScoreService 负责封装与排行榜相关的业务逻辑
         scoreService = new ScoreService(gameDifficulty, scoreDao, "player");
     }
 
