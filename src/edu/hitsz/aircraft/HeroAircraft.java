@@ -2,9 +2,8 @@ package edu.hitsz.aircraft;
 
 import edu.hitsz.application.ImageManager;
 import edu.hitsz.application.Main;
-import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.shoot.DirectShootStrategy;
-import java.util.List;
+import edu.hitsz.shoot.ShootStrategy;
 
 /**
  * 英雄飞机，游戏玩家操控。
@@ -18,6 +17,8 @@ public class HeroAircraft extends AbstractAircraft {
     private int shootNum = 1;
     private int power = 30;
     private int direction = -1;
+
+    private int fireBuffVersion = 0;
 
     private HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
         super(locationX, locationY, speedX, speedY, hp);
@@ -41,6 +42,22 @@ public class HeroAircraft extends AbstractAircraft {
             }
         }
         return instance;
+    }
+
+    public void applyShootStrategyForDuration(ShootStrategy strategy, long millis) {
+        setShootStrategy(strategy);
+        fireBuffVersion++;
+        int currentVersion = fireBuffVersion;
+        Runnable task = () -> {
+            try {
+                Thread.sleep(millis);
+            } catch (InterruptedException ignored) {
+            }
+            if (fireBuffVersion == currentVersion) {
+                setShootStrategy(new DirectShootStrategy());
+            }
+        };
+        new Thread(task, "hero-fire-buff-" + currentVersion).start();
     }
 
     @Override

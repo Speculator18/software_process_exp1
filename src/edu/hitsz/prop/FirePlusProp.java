@@ -15,7 +15,7 @@ public class FirePlusProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
-        heroAircraft.setShootStrategy(new RingShootStrategy());
+        heroAircraft.applyShootStrategyForDuration(new RingShootStrategy(), 5000);
         System.out.println("FirePlusSupply active!");
     }
 }

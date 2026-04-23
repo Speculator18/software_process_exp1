@@ -15,7 +15,7 @@ public class FireProp extends AbstractProp {
 
     @Override
     public void activate(HeroAircraft heroAircraft) {
-        heroAircraft.setShootStrategy(new ScatterShootStrategy());
+        heroAircraft.applyShootStrategyForDuration(new ScatterShootStrategy(), 5000);
         System.out.println("FireSupply active!");
     }
 }
