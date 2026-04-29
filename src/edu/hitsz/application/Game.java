@@ -93,6 +93,7 @@ public class Game extends JPanel {
         this.gameDifficulty = gameDifficulty;
 
         heroAircraft = HeroAircraft.getInstance();
+        heroAircraft.reset();
 
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();

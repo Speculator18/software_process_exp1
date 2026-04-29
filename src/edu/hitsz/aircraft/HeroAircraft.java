@@ -45,6 +45,18 @@ public class HeroAircraft extends AbstractAircraft {
         return instance;
     }
 
+    public synchronized void reset() {
+        setLocation(
+                Main.WINDOW_WIDTH / 2.0,
+                Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight());
+        speedX = 0;
+        speedY = 0;
+        hp = maxHp;
+        isValid = true;
+        fireBuffVersion = 0;
+        setShootStrategy(new DirectShootStrategy());
+    }
+
     // E5 将弹道策略临时切换为指定策略，并在 millis 毫秒后自动恢复直射弹道
     public void applyShootStrategyForDuration(ShootStrategy strategy, long millis) {
         setShootStrategy(strategy);
