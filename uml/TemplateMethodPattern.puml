@@ -2,16 +2,18 @@
 title 模板方法模式（三种难度的游戏主流程）
 
 package "Template Method" {
-  abstract class AbstractGame {
+  abstract class Game {
     - timeInterval: int
     # enemySpawnCycle: double
     # shootCycle: double
     # bossScoreThreshold: int
     + final action(): void
-    # spawnEnemies(): void
-    # spawnBossIfNeeded(score: int): void
-    # increaseDifficultyIfNeeded(score: int, time: int): void
     # initDifficultyParams(): void
+    # isBossEnabled(): boolean
+    # getBossHp(spawnCount: int): int
+    # increaseDifficultyIfNeeded(): void
+    + freezeEnemies(millis: long): void
+    + addScore(delta: int): void
   }
 
   class EasyGame
@@ -31,11 +33,11 @@ package "Application" {
   }
 }
 
-AbstractGame <|-- EasyGame
-AbstractGame <|-- NormalGame
-AbstractGame <|-- HardGame
+Game <|-- EasyGame
+Game <|-- NormalGame
+Game <|-- HardGame
 
-Main ..> AbstractGame : create & run
+Main ..> Game : create & run
 Main ..> GameDifficulty
 
 @enduml

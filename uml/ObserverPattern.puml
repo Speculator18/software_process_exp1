@@ -16,13 +16,6 @@ package "Observer" {
     + removeObserver(observer: SupplyObserver): void
     + notifyObservers(event: SupplyEvent): void
   }
-
-  class SupplyNotifier <<Subject>> {
-    - observerList: List<SupplyObserver>
-    + addObserver(observer: SupplyObserver): void
-    + removeObserver(observer: SupplyObserver): void
-    + notifyObservers(event: SupplyEvent): void
-  }
 }
 
 package "Game Objects" {
@@ -31,20 +24,23 @@ package "Game Objects" {
   }
 
   class BombProp <<Publisher>> {
-    - subject: SupplySubject
-    + BombProp(subject: SupplySubject)
+    - observers: List<SupplyObserver>
+    + BombProp(observers: List<SupplyObserver>)
     + activate(heroAircraft: HeroAircraft): void
+    + notifyObservers(event: SupplyEvent): void
   }
 
   class FreezeProp <<Publisher>> {
-    - subject: SupplySubject
-    + FreezeProp(subject: SupplySubject)
+    - observers: List<SupplyObserver>
+    + FreezeProp(observers: List<SupplyObserver>)
     + activate(heroAircraft: HeroAircraft): void
+    + notifyObservers(event: SupplyEvent): void
   }
 
   class EnemyAircraftObserver <<Observer>> {
     - enemyAircrafts: List<AbstractAircraft>
-    + EnemyAircraftObserver(enemyAircrafts: List<AbstractAircraft>)
+    - game: Game
+    + EnemyAircraftObserver(enemyAircrafts: List<AbstractAircraft>, game: Game)
     + update(event: SupplyEvent): void
   }
 
@@ -55,24 +51,27 @@ package "Game Objects" {
   }
 
   class Game
+  class PropFactory
   class HeroAircraft
   abstract class AbstractAircraft
   abstract class BaseBullet
 }
 
-SupplySubject <|.. SupplyNotifier
 SupplyObserver <|.. EnemyAircraftObserver
 SupplyObserver <|.. EnemyBulletObserver
 
-SupplyNotifier o-- SupplyObserver
-
 AbstractProp <|-- BombProp
 AbstractProp <|-- FreezeProp
+SupplySubject <|.. BombProp
+SupplySubject <|.. FreezeProp
 
-BombProp ..> SupplySubject : notifyObservers(BOMB)
-FreezeProp ..> SupplySubject : notifyObservers(FREEZE)
+BombProp o-- SupplyObserver
+FreezeProp o-- SupplyObserver
 
-Game ..> SupplyNotifier : register observers
+Game ..> EnemyAircraftObserver : create
+Game ..> EnemyBulletObserver : create
+PropFactory ..> BombProp : create
+PropFactory ..> FreezeProp : create
 Game ..> AbstractAircraft
 Game ..> BaseBullet
 

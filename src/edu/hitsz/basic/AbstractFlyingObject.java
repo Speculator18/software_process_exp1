@@ -104,6 +104,15 @@ public abstract class AbstractFlyingObject {
         return speedY;
     }
 
+    public int getSpeedX() {
+        return speedX;
+    }
+
+    public void setSpeed(int speedX, int speedY) {
+        this.speedX = speedX;
+        this.speedY = speedY;
+    }
+
     public BufferedImage getImage() {
         if (image == null){
             image = ImageManager.get(this);
@@ -142,4 +151,3 @@ public abstract class AbstractFlyingObject {
     }
 
 }
-

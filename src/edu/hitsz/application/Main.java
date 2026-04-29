@@ -43,7 +43,19 @@ public class Main {
 
     // E5 由开始菜单调用，根据难度创建游戏面板并切换到游戏界面
     public static void startGame(GameDifficulty difficulty) {
-        Game game = new Game(difficulty);
+        Game game;
+        switch (difficulty) {
+            case EASY:
+                game = new EasyGame();
+                break;
+            case MEDIUM:
+                game = new NormalGame();
+                break;
+            case HARD:
+            default:
+                game = new HardGame();
+                break;
+        }
         MAIN_PANEL.add(game, "Game");
         CARD_LAYOUT.show(MAIN_PANEL, "Game");
         game.action();
