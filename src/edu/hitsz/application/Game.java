@@ -54,6 +54,7 @@ public abstract class Game extends JPanel {
     private final List<BaseBullet> heroBullets;
     private final List<BaseBullet> enemyBullets;
     private final List<AbstractProp> props;
+    private final List<AbstractProp> pendingPropsToAdd;
 
     // 敌机工厂：通过工厂方法模式创建不同类型敌机，
     // 并在各工厂中为敌机绑定对应的弹道策略。
@@ -112,6 +113,7 @@ public abstract class Game extends JPanel {
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
         props = new LinkedList<>();
+        pendingPropsToAdd = new LinkedList<>();
 
         initDifficultyParams();
         nextBossScoreThreshold = bossScoreThreshold;
@@ -165,9 +167,11 @@ public abstract class Game extends JPanel {
             public void run() {
 
                 // 按固定周期生成普通敌机
-                spawnEnemies();
-                spawnBossIfNeeded();
-                increaseDifficultyIfNeeded();
+                if (!isEnemyFrozen()) {
+                    spawnEnemies();
+                    spawnBossIfNeeded();
+                    increaseDifficultyIfNeeded();
+                }
 
                 // 飞机发射子弹
                 shootAction();
@@ -349,52 +353,7 @@ public abstract class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
-                        // E5 敌机被击毁时播放命中音效
-                        SoundManager.playBulletHit();
-                        // 击毁任意敌机后增加分数
-                        score += 10;
-                        if (enemyAircraft instanceof BossEnemy) {
-                            // Boss 被击毁时：随机掉落 3 个道具（类型无限制）
-                            int x = enemyAircraft.getLocationX();
-                            int y = enemyAircraft.getLocationY();
-                            int speedX = 0;
-                            int speedY = 3;
-                            for (int i = 0; i < 3; i++) {
-                                int type = (int) (Math.random() * 5);
-                                AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY, supplyObservers);
-                                props.add(prop);
-                            }
-                            // E5 Boss 被击落后恢复普通背景音乐
-                            MusicManager.stopBossMusic();
-                            if (SoundManager.isEnabled()) {
-                                MusicManager.startBackgroundMusic();
-                            }
-                        } else {
-                            // 高级敌机（精英 / 精锐 / 王牌）按一定概率掉落 1 个道具
-                            double random = Math.random();
-                            if (random < 0.5) {
-                                int x = enemyAircraft.getLocationX();
-                                int y = enemyAircraft.getLocationY();
-                                int speedX = 0;
-                                int speedY = 3;
-                                int typeCount;
-                                if (enemyAircraft instanceof EliteEnemy) {
-                                    typeCount = 3;
-                                } else if (enemyAircraft instanceof ElitePlusEnemy) {
-                                    typeCount = 4;
-                                } else if (enemyAircraft instanceof EliteProEnemy) {
-                                    typeCount = 5;
-                                } else {
-                                    typeCount = 0;
-                                }
-                                if (typeCount > 0) {
-                                    int type = (int) (Math.random() * typeCount);
-                                    AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY,
-                                            supplyObservers);
-                                    props.add(prop);
-                                }
-                            }
-                        }
+                        handleEnemyDestroyed(enemyAircraft);
                     }
                 }
                 // 英雄机 与 敌机 相撞，均损毁
@@ -416,6 +375,11 @@ public abstract class Game extends JPanel {
                 prop.vanish();
             }
         }
+
+        if (!pendingPropsToAdd.isEmpty()) {
+            props.addAll(pendingPropsToAdd);
+            pendingPropsToAdd.clear();
+        }
     }
 
     /**
@@ -429,6 +393,58 @@ public abstract class Game extends JPanel {
         heroBullets.removeIf(AbstractFlyingObject::notValid);
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
         props.removeIf(AbstractFlyingObject::notValid);
+    }
+
+    public void onEnemyDestroyed(AbstractAircraft enemyAircraft) {
+        if (enemyAircraft == null) {
+            return;
+        }
+        handleEnemyDestroyed(enemyAircraft);
+    }
+
+    private void handleEnemyDestroyed(AbstractAircraft enemyAircraft) {
+        SoundManager.playBulletHit();
+        addScore(10);
+        if (enemyAircraft instanceof BossEnemy) {
+            int x = enemyAircraft.getLocationX();
+            int y = enemyAircraft.getLocationY();
+            int speedX = 0;
+            int speedY = 3;
+            for (int i = 0; i < 3; i++) {
+                int type = (int) (Math.random() * 5);
+                AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY, supplyObservers);
+                pendingPropsToAdd.add(prop);
+            }
+            MusicManager.stopBossMusic();
+            if (SoundManager.isEnabled()) {
+                MusicManager.startBackgroundMusic();
+            }
+            return;
+        }
+        double random = Math.random();
+        if (random >= 0.5) {
+            return;
+        }
+        int x = enemyAircraft.getLocationX();
+        int y = enemyAircraft.getLocationY();
+        int speedX = 0;
+        int speedY = 3;
+        int typeCount;
+        if (enemyAircraft instanceof EliteEnemy) {
+            typeCount = 3;
+        } else if (enemyAircraft instanceof ElitePlusEnemy) {
+            typeCount = 4;
+        } else if (enemyAircraft instanceof EliteProEnemy) {
+            typeCount = 5;
+        } else {
+            typeCount = 0;
+        }
+        if (typeCount <= 0) {
+            return;
+        }
+        int type = (int) (Math.random() * typeCount);
+        AbstractProp prop = PropFactory.createProp(type, x, y, speedX, speedY, supplyObservers);
+        pendingPropsToAdd.add(prop);
     }
 
     // E5 检查游戏是否结束，并在结束时弹出姓名输入框并跳转到排行榜界面

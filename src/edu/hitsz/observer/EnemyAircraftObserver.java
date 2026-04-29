@@ -3,8 +3,6 @@ package edu.hitsz.observer;
 import edu.hitsz.aircraft.AbstractAircraft;
 import edu.hitsz.aircraft.BossEnemy;
 import edu.hitsz.application.Game;
-import edu.hitsz.application.MusicManager;
-import edu.hitsz.application.SoundManager;
 
 import java.util.List;
 
@@ -37,17 +35,12 @@ public class EnemyAircraftObserver implements SupplyObserver {
             if (enemyAircraft instanceof BossEnemy) {
                 enemyAircraft.decreaseHp(200);
                 if (enemyAircraft.notValid()) {
-                    MusicManager.stopBossMusic();
-                    if (SoundManager.isEnabled()) {
-                        MusicManager.startBackgroundMusic();
-                    }
-                    game.addScore(10);
+                    game.onEnemyDestroyed(enemyAircraft);
                 }
                 continue;
             }
             enemyAircraft.vanish();
-            game.addScore(10);
+            game.onEnemyDestroyed(enemyAircraft);
         }
     }
 }
-
