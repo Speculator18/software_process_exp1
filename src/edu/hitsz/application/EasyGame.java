@@ -13,6 +13,7 @@ public class EasyGame extends Game {
         enemyMaxNumber = 4;
         enemySpawnCycle = 25;
         shootCycle = 22;
+        enemyShootCycle = 22;
         bossScoreThreshold = Integer.MAX_VALUE;
     }
 
@@ -21,4 +22,3 @@ public class EasyGame extends Game {
         return false;
     }
 }
-

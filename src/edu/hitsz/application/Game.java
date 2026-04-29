@@ -71,9 +71,13 @@ public abstract class Game extends JPanel {
     protected double enemySpawnCycle = 20;
     private int enemySpawnCounter = 0;
 
-    // 英雄机和敌机射击周期（单位：帧计数）
+    // 英雄机射击周期（单位：帧计数）
     protected double shootCycle = 20;
     private int shootCounter = 0;
+
+    // 敌机射击周期（单位：帧计数）
+    protected double enemyShootCycle = 20;
+    private int enemyShootCounter = 0;
 
     // 当前玩家分数
     protected int score = 0;
@@ -285,12 +289,18 @@ public abstract class Game extends JPanel {
         shootCounter++;
         if (shootCounter >= shootCycle) {
             shootCounter = 0;
-            // 英雄机射击
             heroBullets.addAll(heroAircraft.shoot());
-            if (!isEnemyFrozen()) {
-                for (AbstractAircraft enemyAircraft : enemyAircrafts) {
-                    enemyBullets.addAll(enemyAircraft.shoot());
-                }
+        }
+
+        if (isEnemyFrozen()) {
+            return;
+        }
+
+        enemyShootCounter++;
+        if (enemyShootCounter >= enemyShootCycle) {
+            enemyShootCounter = 0;
+            for (AbstractAircraft enemyAircraft : enemyAircrafts) {
+                enemyBullets.addAll(enemyAircraft.shoot());
             }
         }
     }
