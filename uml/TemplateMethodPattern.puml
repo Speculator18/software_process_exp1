@@ -1,0 +1,41 @@
+@startuml
+title 模板方法模式（三种难度的游戏主流程）
+
+package "Template Method" {
+  abstract class AbstractGame {
+    - timeInterval: int
+    # enemySpawnCycle: double
+    # shootCycle: double
+    # bossScoreThreshold: int
+    + final action(): void
+    # spawnEnemies(): void
+    # spawnBossIfNeeded(score: int): void
+    # increaseDifficultyIfNeeded(score: int, time: int): void
+    # initDifficultyParams(): void
+  }
+
+  class EasyGame
+  class NormalGame
+  class HardGame
+}
+
+package "Application" {
+  class Main {
+    + startGame(difficulty: GameDifficulty): void
+  }
+
+  enum GameDifficulty {
+    EASY
+    MEDIUM
+    HARD
+  }
+}
+
+AbstractGame <|-- EasyGame
+AbstractGame <|-- NormalGame
+AbstractGame <|-- HardGame
+
+Main ..> AbstractGame : create & run
+Main ..> GameDifficulty
+
+@enduml
