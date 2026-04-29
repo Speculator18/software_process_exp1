@@ -27,6 +27,8 @@ package "Game Objects" {
     - observers: List<SupplyObserver>
     + BombProp(observers: List<SupplyObserver>)
     + activate(heroAircraft: HeroAircraft): void
+    + addObserver(observer: SupplyObserver): void
+    + removeObserver(observer: SupplyObserver): void
     + notifyObservers(event: SupplyEvent): void
   }
 
@@ -34,6 +36,8 @@ package "Game Objects" {
     - observers: List<SupplyObserver>
     + FreezeProp(observers: List<SupplyObserver>)
     + activate(heroAircraft: HeroAircraft): void
+    + addObserver(observer: SupplyObserver): void
+    + removeObserver(observer: SupplyObserver): void
     + notifyObservers(event: SupplyEvent): void
   }
 
