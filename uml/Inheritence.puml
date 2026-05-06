@@ -91,21 +91,6 @@ AbstractEnemy <|-- ElitePlusEnemy
 AbstractEnemy <|-- EliteProEnemy
 AbstractEnemy <|-- BossEnemy
 
-note bottom of AbstractEnemy
-  Game 中按 enemySpawnCycle 周期生成敌机，
-  在 MobEnemy 与 EliteEnemy 之间随机选择类型
-end note
-
-note right of MobEnemy
-  普通敌机：
-  不发射子弹
-end note
-
-note right of EliteEnemy
-  精英敌机：
-  按设定周期向下直射单排子弹
-end note
-
 abstract class BaseBullet
 {
     - power:int
@@ -166,29 +151,5 @@ AbstractProp <|-- FireProp
 AbstractProp <|-- FirePlusProp
 AbstractProp <|-- BombProp
 AbstractProp <|-- FreezeProp
-
-note bottom of AbstractProp
-  精英敌机 EliteEnemy 坠毁时，
-  Game 以一定概率在其位置生成
-  BloodProp / FireProp / FirePlusProp
-end note
-
-note right of BloodProp
-  加血道具：
-  调用 HeroAircraft.increaseHp(...)
-  恢复一定血量但不超过 maxHp
-end note
-
-note right of FireProp
-  火力道具：
-  激活时在控制台打印
-  "FireSupply active!"
-end note
-
-note right of FirePlusProp
-  超级火力道具：
-  激活时在控制台打印
-  "FirePlusSupply active!"
-end note
 
 @enduml

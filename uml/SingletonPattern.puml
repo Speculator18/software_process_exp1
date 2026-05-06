@@ -1,0 +1,17 @@
+@startuml
+title 单例模式（英雄机 HeroAircraft）
+
+class Game <<Client>> {
+  + action(): void
+}
+
+class HeroAircraft <<Singleton>> {
+  - {static} instance: HeroAircraft
+  - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+  + {static} getInstance(): HeroAircraft
+  + reset(): void
+}
+
+Game ..> HeroAircraft : getInstance()
+
+@enduml
