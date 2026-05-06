@@ -13,7 +13,8 @@ public class NormalGame extends Game {
         enemyMaxNumber = 6;
         enemySpawnCycle = 20;
         shootCycle = 20;
-        enemyShootCycle = 20;
+        enemyShootCycle = 26;
+        bossShootInterval = 4;
         bossScoreThreshold = 200;
     }
 
@@ -31,7 +32,7 @@ public class NormalGame extends Game {
         lastDifficultyIncreaseScore = score;
         enemySpeedBonus += 1;
         enemySpawnCycle = Math.max(10, enemySpawnCycle - 1);
-        enemyShootCycle = Math.max(10, enemyShootCycle - 1);
+        enemyShootCycle = Math.max(14, enemyShootCycle - 1);
         System.out.printf("Normal difficulty increased: score=%d, enemySpeedBonus=%d, enemySpawnCycle=%.0f, enemyShootCycle=%.0f%n",
                 score, enemySpeedBonus, enemySpawnCycle, enemyShootCycle);
     }

@@ -67,4 +67,21 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         return shootStrategy.shoot(this);
     }
 
+    /**
+     * 飞机类默认的碰撞箱缩放系数。
+     * 相比图片尺寸适当缩小判定范围，用于提升弹幕躲避的操作手感。
+     */
+    @Override
+    protected double getHitboxWidthScale() {
+        return 0.65;
+    }
+
+    /**
+     * 飞机类默认的碰撞箱缩放系数（y 方向）。
+     */
+    @Override
+    protected double getHitboxHeightScale() {
+        return 0.45;
+    }
+
 }

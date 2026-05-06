@@ -79,6 +79,10 @@ public abstract class Game extends JPanel {
     protected double enemyShootCycle = 20;
     private int enemyShootCounter = 0;
 
+    // Boss 射击间隔（单位：敌机齐射轮次），用于在保持“齐射节奏”的同时降低 Boss 射击频率
+    protected int bossShootInterval = 3;
+    private int enemyShootRoundCounter = 0;
+
     // 当前玩家分数
     protected int score = 0;
 
@@ -299,8 +303,15 @@ public abstract class Game extends JPanel {
         enemyShootCounter++;
         if (enemyShootCounter >= enemyShootCycle) {
             enemyShootCounter = 0;
+            enemyShootRoundCounter++;
             for (AbstractAircraft enemyAircraft : enemyAircrafts) {
-                enemyBullets.addAll(enemyAircraft.shoot());
+                if (enemyAircraft instanceof BossEnemy) {
+                    if (bossShootInterval <= 0 || enemyShootRoundCounter % bossShootInterval == 0) {
+                        enemyBullets.addAll(enemyAircraft.shoot());
+                    }
+                } else {
+                    enemyBullets.addAll(enemyAircraft.shoot());
+                }
             }
         }
     }

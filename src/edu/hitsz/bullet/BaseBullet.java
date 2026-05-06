@@ -38,4 +38,21 @@ public abstract class BaseBullet extends AbstractFlyingObject {
     public int getPower() {
         return power;
     }
+
+    /**
+     * 子弹类默认的碰撞箱缩放系数。
+     * 子弹图片通常存在透明留白，缩小判定可避免“擦边即中”的不适感。
+     */
+    @Override
+    protected double getHitboxWidthScale() {
+        return 0.7;
+    }
+
+    /**
+     * 子弹类默认的碰撞箱缩放系数（y 方向）。
+     */
+    @Override
+    protected double getHitboxHeightScale() {
+        return 0.7;
+    }
 }
